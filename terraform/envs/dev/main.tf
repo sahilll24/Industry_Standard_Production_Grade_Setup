@@ -41,7 +41,9 @@ module "asg" {
   instance_type         = "t3.micro"
   subnets               = module.vpc.public_subnets
   app_sg                = module.sg.ec2_sg
-  target_group          = module.alb.blue_tg
+  target_group  = var.deploy_color == "blue" ? module.alb.blue_tg : module.alb.green_tg
+
+  deploy_color  = var.deploy_color
 
   instance_profile_name = module.iam.instance_profile_name
 
