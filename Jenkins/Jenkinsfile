@@ -12,7 +12,7 @@ pipeline {
         stage("Preflight Checks") {
             steps {
                 script {
-                    load "jenkins/pipelines/preflight.groovy"
+                    load "Jenkins/pipelines/preflight.groovy"
                 }
             }
         }
