@@ -4,7 +4,7 @@ stage("Terraform Check") {
         terraform --version
         terraform init -backend=false
         terraform validate
-        terraform plan -lock=false -out=tfplan
+        // terraform plan -lock=false -out=tfplan
         """
     }
 }
