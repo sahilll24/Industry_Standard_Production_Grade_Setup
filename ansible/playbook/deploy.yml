@@ -1,0 +1,8 @@
+- name: Deploy Doctor App (Docker Compose)
+  hosts: role_app
+  become: true
+
+  roles:
+    - nginx
+    - docker
+    - app

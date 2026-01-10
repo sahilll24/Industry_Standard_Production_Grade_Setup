@@ -1,0 +1,16 @@
+plugin: aws_ec2
+regions:
+  - ap-south-1
+
+filters:
+  tag:Project: doctor-app
+  tag:Env: dev
+  tag:Color: "{{ lookup('env','NEW_COLOR') }}"
+
+keyed_groups:
+  - key: tags.Role
+    prefix: role_
+
+compose:
+  ansible_connection: amazon.aws.aws_ssm
+  ansible_host: instance_id

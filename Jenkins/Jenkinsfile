@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = "ap-south-1"
+        PROJECT    = "doctor-app"
+        ENV        = "dev"
+    }
+
+    stages {
+
+        stage("Preflight Checks") {
+            steps {
+                script {
+                    load "jenkins/pipelines/preflight.groovy"
+                }
+            }
+        }
+
+        // stage("CI") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/ci.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Provision / Update Infra") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/infra.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Detect Active Color") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/detect_color.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Deploy New Version") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/deploy_green.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Health Check") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/health_check.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Switch Traffic") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/switch_traffic.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("Cleanup Old Version") {
+        //     steps {
+        //         script {
+        //             load "jenkins/pipelines/cleanup_blue.groovy"
+        //         }
+        //     }
+        // }
+    }
+
+    post {
+        success {
+            echo "✅ End-to-End Blue-Green Deployment Successful"
+        }
+        failure {
+            echo "❌ Pipeline Failed – No traffic switched"
+        }
+    }
+}

@@ -1,0 +1,19 @@
+- name: Create app directory
+  file:
+    path: /opt/doctor-app
+    state: directory
+
+- name: Copy docker-compose file
+  copy:
+    src: ../../docker/docker-compose.yml
+    dest: /opt/doctor-app/docker-compose.yml
+
+- name: Pull images
+  command: docker-compose pull
+  args:
+    chdir: /opt/doctor-app
+
+- name: Start application
+  command: docker-compose up -d
+  args:
+    chdir: /opt/doctor-app
