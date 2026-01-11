@@ -4,6 +4,9 @@ pipeline {
     options {
     timestamps()
   }
+   tools {
+        nodejs "node20"
+    }
     environment {
         AWS_REGION = "ap-south-1"
         PROJECT    = "doctor-app"
