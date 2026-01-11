@@ -21,8 +21,8 @@ stage("SonarQube Analysis") {
     withSonarQubeEnv("sonar-server") {
         sh """
         sonar-scanner \
-        -Dproject.settings=sonar-project.properties \
-        -Dsonar.login=$SONAR_TOKEN
+        -Dproject.settings=sonar-project.properties 
+        
         """
     }
 }
