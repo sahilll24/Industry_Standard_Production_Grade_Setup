@@ -18,17 +18,17 @@ stage("Install Dependencies") {
 }
 
 stage("SonarQube Analysis") {
-    withSonarQubeEnv("sonarqube") {
+    withSonarQubeEnv("sonar-server") {
         sh """
         sonar-scanner \
-        -Dsonar.projectKey=doctor-app \
-        -Dsonar.sources=app \
+        -Dproject.settings=sonar-project.properties \
+        -Dsonar.login=$SONAR_TOKEN
         """
     }
 }
 
 stage("Quality Gate") {
-    timeout(time: 2, unit: 'MINUTES') {
+    timeout(time: 3, unit: 'MINUTES') {
         waitForQualityGate abortPipeline: true
     }
 }

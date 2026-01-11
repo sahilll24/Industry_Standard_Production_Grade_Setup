@@ -8,6 +8,7 @@ pipeline {
         AWS_REGION = "ap-south-1"
         PROJECT    = "doctor-app"
         ENV        = "dev"
+        SONAR_TOKEN = credentials('sonar-token-doc')
     }
 
     stages {
@@ -24,13 +25,13 @@ pipeline {
             }
         }
 
-        // stage("CI") {
-        //     steps {
-        //         script {
-        //             load "jenkins/pipelines/ci.groovy"
-        //         }
-        //     }
-        // }
+         stage("CI") {
+             steps {
+                 script {
+                     load "Jenkins/pipelines/ci.groovy"
+                 }
+            }
+         }
 
         // stage("Provision / Update Infra") {
         //     steps {
