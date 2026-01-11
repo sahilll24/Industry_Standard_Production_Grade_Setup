@@ -19,6 +19,7 @@ stage("Ansible Check") {
 
 stage("AWS Identity Check") {
     sh """
+    
     aws sts get-caller-identity --region ${AWS_REGION}
     """
 }

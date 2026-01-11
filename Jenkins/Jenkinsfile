@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    options {
+    timestamps()
+  }
     environment {
         AWS_REGION = "ap-south-1"
         PROJECT    = "doctor-app"
@@ -11,9 +14,13 @@ pipeline {
 
         stage("Preflight Checks") {
             steps {
+                withCredentials([
+          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        ]) {
                 script {
                     load "Jenkins/pipelines/preflight.groovy"
                 }
+        }
             }
         }
 
