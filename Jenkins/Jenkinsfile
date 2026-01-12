@@ -2,11 +2,21 @@ pipeline {
     agent any
 
     options {
-    timestamps()
-  }
-   tools {
+        timestamps()
+    }
+
+    tools {
         nodejs "node20"
     }
+
+    parameters {
+        booleanParam(
+            name: 'PROVISION_INFRA',
+            defaultValue: false,
+            description: 'Provision AWS infra (will be destroyed after verification)'
+        )
+    }
+
     environment {
         AWS_REGION = "ap-south-1"
         PROJECT    = "doctor-app"
@@ -19,67 +29,135 @@ pipeline {
         stage("Preflight Checks") {
             steps {
                 withCredentials([
-          [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
-        ]) {
-                script {
-                    load "Jenkins/pipelines/preflight.groovy"
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+                ]) {
+                    script {
+                        load "Jenkins/pipelines/preflight.groovy"
+                    }
                 }
-        }
             }
         }
 
-         stage("CI") {
-             steps {
-                 script {
-                     load "Jenkins/pipelines/ci.groovy"
-                 }
+        stage("CI") {
+            steps {
+                script {
+                    load "Jenkins/pipelines/ci.groovy"
+                }
             }
-         }
+        }
 
         // stage("Provision / Update Infra") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
-        //         script {
-        //             load "jenkins/pipelines/infra.groovy"
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/infra.groovy"
+        //             }
         //         }
         //     }
         // }
 
         // stage("Detect Active Color") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
-        //         script {
-        //             load "jenkins/pipelines/detect_color.groovy"
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/detect_color.groovy"
+        //             }
         //         }
         //     }
         // }
 
         // stage("Deploy New Version") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
-        //         script {
-        //             load "jenkins/pipelines/deploy_green.groovy"
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/deploy_green.groovy"
+        //             }
         //         }
         //     }
         // }
 
         // stage("Health Check") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
-        //         script {
-        //             load "jenkins/pipelines/health_check.groovy"
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/health_check.groovy"
+        //             }
         //         }
         //     }
         // }
 
         // stage("Switch Traffic") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
-        //         script {
-        //             load "jenkins/pipelines/switch_traffic.groovy"
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/switch_traffic.groovy"
+        //             }
         //         }
         //     }
         // }
 
         // stage("Cleanup Old Version") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
+        //     steps {
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/cleanup_blue.groovy"
+        //             }
+        //         }
+        //     }
+        // }
+
+        // stage("🧪 Manual Verification (Screenshots)") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
         //     steps {
         //         script {
-        //             load "jenkins/pipelines/cleanup_blue.groovy"
+        //             load "Jenkins/pipelines/manual_verify.groovy"
+        //         }
+        //     }
+        // }
+
+        // stage("🧹 Destroy Infra (Cost Safety)") {
+        //     when {
+        //         expression { params.PROVISION_INFRA }
+        //     }
+        //     steps {
+        //         withCredentials([
+        //             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        //         ]) {
+        //             script {
+        //                 load "Jenkins/pipelines/destroy_infra.groovy"
+        //             }
         //         }
         //     }
         // }
@@ -87,10 +165,16 @@ pipeline {
 
     post {
         success {
-            echo "✅ End-to-End Blue-Green Deployment Successful"
+            echo "✅ End-to-End Blue-Green Deployment Completed"
         }
+
         failure {
-            echo "❌ Pipeline Failed – No traffic switched"
+            echo "❌ Pipeline Failed – Cleaning Infra"
+            script {
+                if (params.PROVISION_INFRA) {
+                    load "Jenkins/pipelines/destroy_infra.groovy"
+                }
+            }
         }
     }
 }

@@ -21,8 +21,28 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
+app.get("/health", async (_req, res) => {
+  try {
+    // Check MongoDB connection
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error("MongoDB not connected");
+    }
+
+    res.status(200).json({
+      status: "UP",
+      service: "doctor-app-backend",
+      database: "CONNECTED",
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "DOWN",
+      service: "doctor-app-backend",
+      database: "DISCONNECTED",
+      error: err.message,
+    });
+  }
 });
 
 // API routes
