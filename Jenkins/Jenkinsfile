@@ -165,7 +165,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ End-to-End Blue-Green Deployment Completed"
+            echo "✅ Guardrails before Production"
         }
 
         failure {
