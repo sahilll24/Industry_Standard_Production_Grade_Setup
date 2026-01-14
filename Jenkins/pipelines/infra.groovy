@@ -2,6 +2,15 @@
 
 echo "🏗 Infrastructure Provisioning Started"
 
+stage("Bootstrapping"){
+    dir("terraform/bootstrap"){
+        sh """
+            terraform init
+            terraform apply -auto-approve
+        """
+    }
+}
+
 stage("Terraform Init") {
     dir("terraform/envs/dev") {
         sh "terraform init -reconfigure"
@@ -13,14 +22,7 @@ stage("Terraform Validate") {
         sh "terraform validate"
     }
 }
-stage("Bootstrapping"){
-    dir("terraform/bootstrap"){
-        sh """
-            terraform init
-            terraform apply -auto-approve
-        """
-    }
-}
+
 stage("Terraform Plan") {
     dir("terraform/envs/dev") {
         sh "terraform plan"

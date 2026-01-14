@@ -5,9 +5,11 @@ stage("Deploy ${env.NEW_COLOR}") {
         -var="deploy_color=${env.NEW_COLOR}"
         """
     }
+    sleep(300)
     dir("ansible") {
         sh """
-        ansible-playbook playbooks/deploy.yml
+         export NEW_COLOR=${env.NEW_COLOR}
+        ansible-playbook -i inventory/aws_ec2.yml playbooks/deploy.yml
         """
     }
 }
