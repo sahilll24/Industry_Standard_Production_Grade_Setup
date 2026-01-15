@@ -5,15 +5,20 @@
 
 - name: Copy docker-compose file
   copy:
-    src: ../../docker/docker-compose.yml
+    src: docker/docker-compose.yml
     dest: /opt/doctor-app/docker-compose.yml
+
+- name: Copy env file
+  copy:
+    src: app/Server/.env
+    dest: /opt/doctor-app/.env
 
 - name: Pull images
   command: docker-compose pull
   args:
     chdir: /opt/doctor-app
 
-- name: Start application
+- name: Start containers
   command: docker-compose up -d
   args:
     chdir: /opt/doctor-app

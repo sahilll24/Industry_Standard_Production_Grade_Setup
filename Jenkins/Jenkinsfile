@@ -22,6 +22,8 @@ pipeline {
         PROJECT    = "doctor-app"
         ENV        = "dev"
         SONAR_TOKEN = credentials('sonar-token-doc')
+        DOCKERHUB   = credentials('dockerhub-cred')
+        DOCKER_REPO = "sahil0724"
     }
 
     stages {

@@ -1,5 +1,3 @@
-
-
 services:
   mongodb:
     image: mongo:6
@@ -11,15 +9,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 20s
 
   backend:
+    image: sahil0724/doctor-backend:latest
     container_name: backend
-    build:
-      context: ../app/Server
-      dockerfile: ../../docker/Server/Dockerfile
     env_file:
-      - ../app/Server/.env
+      - .env
     ports:
       - "5000:5000"
     depends_on:
@@ -28,10 +23,8 @@ services:
     restart: always
 
   frontend:
+    image: sahil0724/doctor-frontend:latest
     container_name: frontend
-    build:
-      context: ../app/Client
-      dockerfile: ../../docker/Client/Dockerfile
     ports:
       - "80:80"
     depends_on:

@@ -5,7 +5,7 @@ stage("Deploy ${env.NEW_COLOR}") {
         -var="deploy_color=${env.NEW_COLOR}"
         """
     }
-    sleep(300)
+    sleep(60)
     dir("ansible") {
         sh """
          export NEW_COLOR=${env.NEW_COLOR}
