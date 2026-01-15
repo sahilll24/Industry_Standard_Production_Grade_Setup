@@ -33,7 +33,7 @@ stage("Quality Gate") {
     }
 }
 stage('Build Docker Images') {
-            steps {
+            
                 echo "🐳 Building frontend image..."
                 sh """
                 docker build \
@@ -51,10 +51,10 @@ stage('Build Docker Images') {
                   -f docker/Server/Dockerfile \
                   app/Server
                 """
-            }
+            
         }
 stage('Push Docker Images') {
-            steps {
+            
                 echo "📤 Pushing images to DockerHub..."
                 sh """
                 echo "$DOCKERHUB_PSW" | docker login -u "$DOCKERHUB_USR" --password-stdin
@@ -67,5 +67,5 @@ stage('Push Docker Images') {
 
                 docker logout
                 """
-            }
+          
         }
