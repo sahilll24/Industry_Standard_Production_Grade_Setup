@@ -165,18 +165,40 @@ pipeline {
           }
     }
 
-    post {
-        success {
-            echo "✅ Blue Green Deployment is Successfully Done...."
-        }
+   post {
+    success {
+        echo "✅ Blue Green Deployment is Successfully Done...."
+    }
 
-        failure {
-            echo "❌ Pipeline Failed – Cleaning Infra"
-            script {
-                if (params.PROVISION_INFRA) {
+    failure {
+        echo "❌ Pipeline Failed – Cleaning Infra"
+
+        script {
+            if (params.PROVISION_INFRA) {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+                ]) {
+                    load "Jenkins/pipelines/destroy_infra.groovy"
+                }
+            } else {
+                echo "ℹ️ Infra provisioning was disabled. Skipping cleanup."
+            }
+        }
+    }
+
+    aborted {
+        echo "⚠️ Pipeline Aborted – Cleaning Infra"
+
+        script {
+            if (params.PROVISION_INFRA) {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+                ]) {
                     load "Jenkins/pipelines/destroy_infra.groovy"
                 }
             }
         }
     }
+}
+
 }
