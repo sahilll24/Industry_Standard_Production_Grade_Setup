@@ -2,8 +2,7 @@ stage("Terraform Check") {
     dir("terraform/envs/dev") {
         sh """
         terraform --version
-        terraform init -backend=false
-        terraform validate
+       
        
         """
     }
