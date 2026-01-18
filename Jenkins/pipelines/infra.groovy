@@ -31,9 +31,8 @@ stage("Terraform Plan") {
 
 stage("Terraform Apply") {
     dir("terraform/envs/dev") {
-        sh "
-        terraform apply -auto-approve
-        "
+        sh "terraform apply -auto-approve"
+        
     }
 }
 
