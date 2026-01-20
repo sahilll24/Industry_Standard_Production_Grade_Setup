@@ -9,13 +9,20 @@ pipeline {
         nodejs "node20"
     }
 
-    parameters {
-        booleanParam(
-            name: 'PROVISION_INFRA',
-            defaultValue: false,
-            description: 'Provision AWS infra (will be destroyed after verification)'
-        )
-    }
+   parameters {
+    booleanParam(
+        name: 'PROVISION_INFRA',
+        defaultValue: false,
+        description: 'Provision AWS infra (will be destroyed after verification)'
+    )
+
+    choice(
+        name: 'DEPLOY_COLOR',
+        choices: ['blue', 'green'],
+        description: 'Target deployment color'
+    )
+}
+
 
     environment {
         AWS_REGION = "ap-south-1"

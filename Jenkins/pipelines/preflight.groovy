@@ -22,3 +22,11 @@ stage("AWS Identity Check") {
     aws sts get-caller-identity --region ${AWS_REGION}
     """
 }
+stage("Set Deployment Color") {
+    script {
+        env.NEW_COLOR = params.DEPLOY_COLOR
+        echo "🎨 Deployment Color Set To: ${env.NEW_COLOR}"
+    }
+}
+
+
