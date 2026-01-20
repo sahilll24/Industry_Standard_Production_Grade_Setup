@@ -5,9 +5,5 @@ stage("Terraform Destroy") {
     }
 }
 
-stage("Terraform Destroy(bootstrap)") {
-    dir("terraform/bootstrap") {
-        sh "terraform destroy -auto-approve"
-    }
-}
+
 
