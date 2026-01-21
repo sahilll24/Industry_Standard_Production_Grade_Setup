@@ -6,4 +6,5 @@ variable "aws_region" {
 variable "deploy_color" {
   description = "Deployment color (blue or green)"
   type        = string
+  default     = "blue"
 }
