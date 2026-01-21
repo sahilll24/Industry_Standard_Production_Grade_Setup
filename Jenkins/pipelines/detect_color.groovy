@@ -1,13 +1,13 @@
 stage("Detect Active Color") {
     script {
 
-       
         def listenerArn = sh(
-            script: "terraform -chdir=terraform/envs/dev output -raw listener_arn",
+            script: "terraform -chdir=terraform/envs/dev output -raw -no-color listener_arn",
             returnStdout: true
         ).trim()
 
-     
+        echo "Listener ARN: ${listenerArn}"
+
         def activeTG = sh(
             script: """
             aws elbv2 describe-listeners \
@@ -19,7 +19,6 @@ stage("Detect Active Color") {
             returnStdout: true
         ).trim()
 
-       
         if (activeTG.contains("blue")) {
             env.ACTIVE_COLOR = "blue"
             env.NEW_COLOR = "green"
