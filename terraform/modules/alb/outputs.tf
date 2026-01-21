@@ -13,3 +13,7 @@ output "blue_tg" {
 output "green_tg" {
   value = aws_lb_target_group.green.arn
 }
+output "listener_arn" {
+  description = "HTTP listener ARN"
+  value       = aws_lb_listener.http.arn
+}
