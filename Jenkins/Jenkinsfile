@@ -32,6 +32,7 @@ pipeline {
         DOCKERHUB   = credentials('dockerhub-cred')
         DOCKER_REPO = "sahil0724"
         TF_CLI_ARGS = "-no-color"
+        NEW_COLOR = "${params.NEW_COLOR}"
     }
 
     stages {
