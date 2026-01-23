@@ -7,27 +7,36 @@ stage("Deploy ${env.NEW_COLOR}") {
     }
 
     dir("ansible") {
-        sh """
-        set -e
-        export NEW_COLOR=${env.NEW_COLOR}
+sh """
+#!/bin/bash
+set -e
 
-        echo "⏳ Waiting for EC2 instances to appear in Ansible inventory..."
+export AWS_REGION=ap-south-1
+export NEW_COLOR=${NEW_COLOR}
 
-        for i in {1..20}; do
-          COUNT=\$(ansible-inventory -i inventory/aws_ec2.yml --list | grep instance_id | wc -l)
-          if [ "\$COUNT" -gt 0 ]; then
-            echo "✅ Inventory ready"
-            break
-          fi
-          echo "Waiting for instances (attempt \$i)..."
-          sleep 15
-        done
+echo "⏳ Waiting for EC2 instances to be registered in SSM..."
 
-        echo "📦 Final inventory:"
-        ansible-inventory -i inventory/aws_ec2.yml --graph
+for i in {1..30}; do
+  COUNT=$(aws ssm describe-instance-information \
+    --region $AWS_REGION \
+    --query "InstanceInformationList[?PingStatus=='Online'] | length(@)" \
+    --output text)
 
-        echo "🚀 Running Ansible deployment"
-        ansible-playbook -i inventory/aws_ec2.yml playbook/deploy.yml
-        """
-    }
+  if [ "$COUNT" -gt 0 ]; then
+    echo "✅ SSM instances are online"
+    break
+  fi
+
+  echo "⏳ SSM not ready yet (attempt $i)..."
+  sleep 20
+done
+
+echo "📦 Inventory after SSM ready:"
+ansible-inventory -i inventory/aws_ec2.yml --graph
+
+echo "🚀 Running Ansible deployment"
+ansible-playbook -i inventory/aws_ec2.yml playbook/deploy.yml
+"""
+}
+
 }

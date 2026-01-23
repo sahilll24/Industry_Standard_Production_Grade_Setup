@@ -8,7 +8,14 @@ resource "aws_launch_template" "this" {
   instance_type = var.instance_type
 
   network_interfaces {
-    security_groups = [var.app_sg]
+    associate_public_ip_address = true
+    security_groups             = [var.app_sg]
+  }
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
   }
 
   tag_specifications {
@@ -22,6 +29,7 @@ resource "aws_launch_template" "this" {
     }
   }
 }
+
 
 resource "aws_autoscaling_group" "this" {
   name                = "${var.project_name}-${var.env}-${var.deploy_color}-asg"
