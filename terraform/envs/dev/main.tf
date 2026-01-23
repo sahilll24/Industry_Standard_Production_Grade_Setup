@@ -37,7 +37,7 @@ module "asg" {
 
   project_name          = "doctor-app"
   env                   = "dev"
-  ami                   = "ami-02b8269d5e85954ef"
+  ami                   = "ami-0ced6a024bb18ff2e"
   instance_type         = "t3.micro"
   subnets               = module.vpc.public_subnets
   app_sg                = module.sg.ec2_sg
