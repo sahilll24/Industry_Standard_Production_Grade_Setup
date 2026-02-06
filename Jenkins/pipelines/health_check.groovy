@@ -4,11 +4,11 @@ stage("Health Check") {
             waitUntil {
 
                 def tgArn = sh(
-                    script: "terraform -chdir=terraform/envs/dev output -raw -no-color ${env.NEW_COLOR}_tg_arn",
+                    script: "terraform -chdir=terraform/envs/dev/base output -raw ${env.NEW_COLOR}_tg_arn",
                     returnStdout: true
                 ).trim()
 
-                echo "Target Group ARN (${env.NEW_COLOR}): ${tgArn}"
+                echo "🎯 Target Group ARN (${env.NEW_COLOR}): ${tgArn}"
 
                 def health = sh(
                     script: """
@@ -21,9 +21,16 @@ stage("Health Check") {
                     returnStdout: true
                 ).trim()
 
-                echo "🩺 ${env.NEW_COLOR.toUpperCase()} Health Status: ${health}"
+                echo "🩺 ${env.NEW_COLOR.toUpperCase()} Target States: ${health}"
 
-                return health.contains("healthy")
+                def states = health.split("\\s+")
+
+                if (states.size() == 0) {
+                    echo "⚠️ No targets registered yet"
+                    return false
+                }
+
+                return states.every { it == "healthy" }
             }
         }
     }

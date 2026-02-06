@@ -15,12 +15,6 @@ pipeline {
         defaultValue: false,
         description: 'Provision AWS infra (will be destroyed after verification)'
     )
-
-    choice(
-        name: 'DEPLOY_COLOR',
-        choices: ['blue', 'green'],
-        description: 'Target deployment color'
-    )
 }
 
 
@@ -32,7 +26,7 @@ pipeline {
         DOCKERHUB   = credentials('dockerhub-cred')
         DOCKER_REPO = "sahil0724"
         TF_CLI_ARGS = "-no-color"
-        NEW_COLOR = "${params.NEW_COLOR}"
+        // NEW_COLOR = "${params.NEW_COLOR}"
     }
 
     stages {
@@ -57,7 +51,7 @@ pipeline {
             }
         }
 
-          stage("Provision / Update Infra") {
+          stage("Provisioning BASE and Bootstrap Infra ") {
               when {
                   expression { params.PROVISION_INFRA }
               }
@@ -101,6 +95,33 @@ pipeline {
                   }
               }
           }
+
+
+           stage("Wait for SSM (${env.NEW_COLOR})") {
+            when {
+                expression { params.PROVISION_INFRA }
+            }
+            steps {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+                ]) {
+                    script {
+                        load "Jenkins/pipelines/wait_for_ssm.groovy"
+                    }
+                }
+            }
+        }
+
+        stage("Ansible Deploy (${env.NEW_COLOR})") {
+            when {
+                expression { params.PROVISION_INFRA }
+            }
+            steps {
+                script {
+                    load "Jenkins/pipelines/app_deploy_ansible.groovy"
+                }
+            }
+        }  
 
           stage("Health Check") {
               when {

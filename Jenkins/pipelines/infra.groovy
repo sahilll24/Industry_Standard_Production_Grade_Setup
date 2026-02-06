@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
-echo "🏗 Infrastructure Provisioning Started"
-echo "🎨 Deploy Color Selected: ${params.DEPLOY_COLOR}"
+echo "🏗 Infrastructure Provisioning Started For Base and Bootstrap..."
+
 
 stage("Bootstrapping") {
     dir("terraform/bootstrap") {
@@ -12,34 +12,28 @@ stage("Bootstrapping") {
     }
 }
 
-stage("Terraform Init") {
-    dir("terraform/envs/dev") {
+stage("Terraform Init for base infra") {
+    dir("terraform/envs/dev/base") {
         sh "terraform init -reconfigure"
     }
 }
 
-stage("Terraform Validate") {
-    dir("terraform/envs/dev") {
+stage("Terraform Validate for base infra") {
+    dir("terraform/envs/dev/base") {
         sh "terraform validate"
     }
 }
 
-stage("Terraform Plan") {
-    dir("terraform/envs/dev") {
-        sh """
-            terraform plan \
-            -var="deploy_color=${params.DEPLOY_COLOR}"
-        """
+stage("Terraform Plan for base infra") {
+    dir("terraform/envs/dev/base") {
+        sh "terraform plan"
     }
 }
 
-stage("Terraform Apply") {
-    dir("terraform/envs/dev") {
-        sh """
-            terraform apply -auto-approve \
-            -var="deploy_color=${params.DEPLOY_COLOR}"
-        """
+stage("Terraform Apply for base infra") {
+    dir("terraform/envs/dev/base") {
+        sh "terraform apply -auto-approve"
     }
 }
 
-echo "✅ Infrastructure Ready for ${params.DEPLOY_COLOR}"
+echo "✅ Infrastructure Ready for Base And Bootstrap...."

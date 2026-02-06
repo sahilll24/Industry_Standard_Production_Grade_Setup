@@ -1,16 +1,3 @@
-
-
-output "alb_dns_name" {
-  value = module.alb.alb_dns_name
-}
-
-output "blue_tg_arn" {
-  value = module.alb.blue_tg
-}
-
-output "green_tg_arn" {
-  value = module.alb.green_tg
-}
 output "active_asg_name" {
   value = module.asg.asg_name
 }
