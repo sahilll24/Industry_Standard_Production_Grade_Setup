@@ -97,7 +97,7 @@ pipeline {
           }
 
 
-           stage("Wait for SSM (${env.NEW_COLOR})") {
+           stage("Wait for SSM To be Ready") {
             when {
                 expression { params.PROVISION_INFRA }
             }
@@ -112,7 +112,7 @@ pipeline {
             }
         }
 
-        stage("Ansible Deploy (${env.NEW_COLOR})") {
+        stage("Ansible Deployment ") {
             when {
                 expression { params.PROVISION_INFRA }
             }
