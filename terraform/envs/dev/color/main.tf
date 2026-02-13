@@ -8,7 +8,7 @@ data "terraform_remote_state" "base" {
 }
 
 module "asg" {
-  source = "../../modules/ec2_asg"
+  source = "../../../modules/ec2_asg"
 
   project_name          = "doctor-app"
   env                   = "dev"

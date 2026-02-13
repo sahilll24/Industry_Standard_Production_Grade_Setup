@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "../../modules/vpc"
+  source = "../../../modules/vpc"
 
   env  = "dev"
   cidr = "10.0.0.0/16"
@@ -7,7 +7,7 @@ module "vpc" {
 }
 
 module "sg" {
-  source = "../../modules/security_group"
+  source = "../../../modules/security_group"
 
   project_name = "doctor-app"
   env          = "dev"
@@ -16,7 +16,7 @@ module "sg" {
 
 
 module "alb" {
-  source = "../../modules/alb"
+  source = "../../../modules/alb"
 
   project_name = "doctor-app"
   env          = "dev"
@@ -25,7 +25,7 @@ module "alb" {
   alb_sg       = module.sg.alb_sg
 }
 module "iam" {
-  source = "../../modules/iam"
+  source = "../../../modules/iam"
 
   project_name = "doctor-app"
   env          = "dev"
