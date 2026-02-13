@@ -15,6 +15,11 @@ pipeline {
         defaultValue: false,
         description: 'Provision AWS infra (will be destroyed after verification)'
     )
+    booleanParam(
+        name: 'DESTROY_ALL',
+        defaultValue: false,
+        description: 'Destroy ALL infra (color → base → bootstrap)'
+    )
 }
 
 
