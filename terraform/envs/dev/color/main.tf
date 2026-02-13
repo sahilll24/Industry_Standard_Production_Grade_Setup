@@ -19,7 +19,10 @@ module "asg" {
   instance_profile_name = data.terraform_remote_state.base.outputs.instance_profile_name
 
   deploy_color = var.deploy_color
-  target_group = var.deploy_color == "blue"
+  target_group = (
+  var.deploy_color == "blue"
     ? data.terraform_remote_state.base.outputs.blue_tg_arn
     : data.terraform_remote_state.base.outputs.green_tg_arn
+)
+
 }
