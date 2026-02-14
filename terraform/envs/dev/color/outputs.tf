@@ -13,6 +13,3 @@ output "launch_template_id" {
 output "launch_template_version" {
   value = module.asg.launch_template_version
 }
-output "listener_arn" {
-  value = module.alb.listener_arn
-}
