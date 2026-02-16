@@ -3,10 +3,6 @@
   become: true
   gather_facts: false
 
-  pre_tasks:
-    - name: Wait for instances to be reachable via SSM
-      amazon.aws.aws_ssm_wait:
-        timeout: 600
 
   roles:
     - nginx
