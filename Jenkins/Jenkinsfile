@@ -117,16 +117,21 @@ pipeline {
             }
         }
 
-        stage("Ansible Deployment ") {
-            when {
-                expression { params.PROVISION_INFRA }
+        stage("Ansible Deployment") {
+    when {
+        expression { params.PROVISION_INFRA }
+    }
+    steps {
+        withCredentials([
+            [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']
+        ]) {
+            script {
+                load "Jenkins/pipelines/app_deploy_ansible.groovy"
             }
-            steps {
-                script {
-                    load "Jenkins/pipelines/app_deploy_ansible.groovy"
-                }
-            }
-        }  
+        }
+    }
+}
+ 
 
           stage("Health Check") {
               when {
