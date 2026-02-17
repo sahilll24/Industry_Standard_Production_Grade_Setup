@@ -7,8 +7,7 @@ stage("Ansible Deploy (${env.NEW_COLOR})") {
               ansible-galaxy collection install community.aws --force
 
               ansible-inventory -i inventory/aws_ec2.yml --graph
-              ansible-playbook -i inventory/aws_ec2.yml playbook/deploy.yml
-              ansible-playbook -vvv output
+              ansible-playbook -vvv -i inventory/aws_ec2.yml playbook/deploy.yml
         """
     }
 }

@@ -12,5 +12,4 @@ keyed_groups:
   - key: tags.Role
     prefix: role_
 
-compose:
-  ansible_connection: amazon.aws.aws_ssm
+
