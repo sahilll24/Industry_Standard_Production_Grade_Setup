@@ -1,9 +1,26 @@
+
+
+
+- name: Bootstrap Python on EC2
+  hosts: role__app
+  connection: amazon.aws.aws_ssm
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Ensure Python3 is installed
+      raw: |
+        if ! command -v python3 >/dev/null 2>&1; then
+          yum install -y python3 || dnf install -y python3
+        fi
+
+
+
 - name: Deploy Doctor App (Docker Compose)
   hosts: role__app
   connection: amazon.aws.aws_ssm
   become: true
-  gather_facts: false
-
+  gather_facts: true
 
   roles:
     - nginx

@@ -12,7 +12,7 @@ module "asg" {
 
   project_name          = "doctor-app"
   env                   = "dev"
-  ami                   = "ami-0ced6a024bb18ff2e"
+  ami                   = "ami-0317b0f0a0144b137"
   instance_type         = "t3.micro"
   subnets               = data.terraform_remote_state.base.outputs.public_subnets
   app_sg                = data.terraform_remote_state.base.outputs.ec2_sg
