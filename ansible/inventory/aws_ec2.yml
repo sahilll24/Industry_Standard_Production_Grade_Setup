@@ -3,6 +3,9 @@ plugin: amazon.aws.aws_ec2
 regions:
   - ap-south-1
 
+hostnames:
+  - instance-id
+
 filters:
   tag:Project: doctor-app
   tag:Env: dev
