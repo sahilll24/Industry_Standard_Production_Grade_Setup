@@ -1,6 +1,6 @@
 - name: Install NGINX
   become: yes
-  apt:
+  yum:
     name: nginx
     state: present
     update_cache: yes
