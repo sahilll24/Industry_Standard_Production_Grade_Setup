@@ -8,6 +8,7 @@ stage("Ansible Deploy (${env.NEW_COLOR})") {
 
               ansible-inventory -i inventory/aws_ec2.yml --graph
               ansible-playbook -i inventory/aws_ec2.yml playbook/deploy.yml
+              ansible-playbook -vvv output
         """
     }
 }

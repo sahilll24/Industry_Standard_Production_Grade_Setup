@@ -3,7 +3,7 @@
 
 - name: Bootstrap Python on EC2
   hosts: role__app
-  connection: amazon.aws.aws_ssm
+  # connection: amazon.aws.aws_ssm
   gather_facts: false
   become: true
 
@@ -18,7 +18,7 @@
 
 - name: Deploy Doctor App (Docker Compose)
   hosts: role__app
-  connection: amazon.aws.aws_ssm
+  # connection: amazon.aws.aws_ssm
   become: true
   gather_facts: true
 
