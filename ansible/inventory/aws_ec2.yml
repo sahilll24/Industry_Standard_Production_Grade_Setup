@@ -13,4 +13,4 @@ keyed_groups:
 
 compose:
   ansible_connection: amazon.aws.aws_ssm
-  ansible_host: instance_id
+  

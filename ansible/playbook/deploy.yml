@@ -1,5 +1,6 @@
 - name: Deploy Doctor App (Docker Compose)
   hosts: role__app
+  connection: amazon.aws.aws_ssm
   become: true
   gather_facts: false
 
