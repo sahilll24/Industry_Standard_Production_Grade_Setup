@@ -1,5 +1,5 @@
 - name: Deploy Doctor App (Docker Compose)
-  hosts: role_app
+  hosts: role__app
   become: true
   gather_facts: false
 
