@@ -4,8 +4,14 @@
 - name: Bootstrap Python on EC2
   hosts: role__app
   connection: amazon.aws.aws_ssm
+  vars:
+    ansible_aws_ssm_bucket_name: doctor-consultation-app-terraform-state
+    ansible_aws_ssm_region: ap-south-1
+    
   gather_facts: false
   become: true
+
+  
 
   tasks:
     - name: Ensure Python3 is installed
@@ -19,8 +25,13 @@
 - name: Deploy Doctor App (Docker Compose)
   hosts: role__app
   connection: amazon.aws.aws_ssm
+  vars:
+    ansible_aws_ssm_bucket_name: doctor-consultation-app-terraform-state
+    ansible_aws_ssm_region: ap-south-1
+
   become: true
   gather_facts: false
+  
 
   roles:
     - nginx
