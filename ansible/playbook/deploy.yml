@@ -34,6 +34,5 @@
   
 
   roles:
-    - nginx
     - docker
     - app
