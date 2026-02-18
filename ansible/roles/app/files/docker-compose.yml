@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: sahil0724/doctor-backend:latest
+    container_name: backend
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: always
+
+  frontend:
+    image: sahil0724/doctor-frontend:latest
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  mongo_data:

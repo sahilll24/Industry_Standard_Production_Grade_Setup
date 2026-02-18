@@ -5,12 +5,12 @@
 
 - name: Copy docker-compose file
   copy:
-    src: docker/docker-compose.yml
+    src: docker-compose.yml
     dest: /opt/doctor-app/docker-compose.yml
 
 - name: Copy env file
   copy:
-    src: app/Server/.env
+    src: .env
     dest: /opt/doctor-app/.env
 
 - name: Pull images
