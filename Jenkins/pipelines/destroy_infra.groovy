@@ -11,7 +11,7 @@ if (params.DESTROY_ALL) {
             echo "🟥 Destroying COLOR layer"
             dir("terraform/envs/dev/color") {
                 sh """
-                  terraform init -reconfigure
+                  terraform init -reconfigure -upgrade=false
                   terraform destroy -auto-approve
                 """
             }
@@ -19,7 +19,7 @@ if (params.DESTROY_ALL) {
             echo "🟦 Destroying BASE layer"
             dir("terraform/envs/dev/base") {
                 sh """
-                  terraform init -reconfigure
+                  terraform init -reconfigure -upgrade=false
                   terraform destroy -auto-approve
                 """
             }
@@ -27,7 +27,7 @@ if (params.DESTROY_ALL) {
             echo "🟨 Destroying BOOTSTRAP layer"
             dir("terraform/bootstrap") {
                 sh """
-                  terraform init -reconfigure
+                  terraform init -reconfigure -upgrade=false
                   terraform destroy -auto-approve
                 """
             }

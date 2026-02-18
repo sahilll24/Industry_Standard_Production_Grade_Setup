@@ -12,23 +12,36 @@ resource "aws_lb" "this" {
 
 resource "aws_lb_target_group" "blue" {
   name     = "${var.env}-blue"
-  port     = 5000
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path = "/health"
-  }
-}
-resource "aws_lb_target_group" "green" {
-  name     = "${var.env}-green"
-  port     = 5000
+  port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
   health_check {
-    path = "/health"
+    path                = "/"
+    matcher             = "200"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    interval            = 15
+    timeout             = 5
   }
 }
+
+resource "aws_lb_target_group" "green" {
+  name     = "${var.env}-green"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    path                = "/"
+    matcher             = "200"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    interval            = 15
+    timeout             = 5
+  }
+}
+
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
